@@ -1,4 +1,5 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query";
+import { AXIOS } from "../services";
 
 export const useLogin = () => {
     return useMutation({
@@ -7,4 +8,4 @@ export const useLogin = () => {
             return res.data;
         }
     });
-};  
+};

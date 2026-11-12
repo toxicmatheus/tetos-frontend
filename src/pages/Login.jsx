@@ -1,21 +1,38 @@
-
-import { Form, Input, Button } from "antd";
+import { App, Button, Form, Input } from "antd";
 import { useLogin } from "../hooks/usuarioHooks";
+import { GoBell } from "react-icons/go";
+import { useNavigate } from "react-router";
 
 const Login = () => {
 
-    const {mutate: login, isPending: loginPending} = useLogin();
+    const navigate = useNavigate();
+    const { notification } = App.useApp();
+    const { mutate: login, isPending: loginPending } = useLogin();
 
     function logar(dados) {
         login(dados, {
-            onSuccess: (res) => {
-                alert(res.description)
+            onSuccess: ({type, description, usuario, token}) => {
+                notification[type]({
+                    description,
+                    icon: <GoBell/>, 
+                });
+                if(type == "success"){ 
+                sessionStorage.setItem("token", token);
+                sessionStorage.setItem("usuario", JSON.stringify(usuario));
+                navigate("/home");
+                }
+            },
+            onError: ({response: {data: {type, description } } }) => {
+                notification[type]({
+                    description
+                });
             }
         });
+
     }
 
     return (
-        <div className="h-screen flex items-center justify-center bg-blue-500">
+        <div className="h-screen flex justify-center items-center bg-blue-500">
             <div className="w-75 p-4 bg-white rounded-2xl">
                 <Form
                     layout="vertical"
@@ -23,35 +40,28 @@ const Login = () => {
                 >
                     <Form.Item
                         label="Email"
-                        name="email"
-                        rules={[
-                            { required: true, message: "Campo obrigatório" }
-                        ]}
+                        name={"email"}
+                        rules={[{ required: true, message: "Campo obrigatório" }]}
                     >
                         <Input placeholder="email@email.com" />
                     </Form.Item>
-
                     <Form.Item
                         label="Senha"
-                        name="senha"
-                        rules={[
-                            { required: true, message: "Campo obrigatório" }
-                        ]}
+                        name={"senha"}
+                        rules={[{ required: true, message: "Campo obrigatório" }]}
                     >
-                        <Input.Password placeholder="********" />
+                        <Input.Password placeholder="*********" />
                     </Form.Item>
-
                     <Button
                         type="primary"
                         htmlType="submit"
                         className="w-full mt-4"
-                    >
-                        Enviar
-                    </Button>
+                        disabled={loginPending}
+                    >Enviar</Button>
                 </Form>
             </div>
         </div>
     );
-};
+}
 
 export default Login;
