@@ -1,6 +1,5 @@
 import { App, Button, Form, Input } from "antd";
 import { useLogin } from "../hooks/usuarioHooks";
-import { GoBell } from "react-icons/go";
 import { useNavigate } from "react-router";
 
 const Login = () => {
@@ -11,24 +10,22 @@ const Login = () => {
 
     function logar(dados) {
         login(dados, {
-            onSuccess: ({type, description, usuario, token}) => {
+            onSuccess: ({ type, description, usuario, token }) => {
                 notification[type]({
-                    description,
-                    icon: <GoBell/>, 
+                    description
                 });
-                if(type == "success"){ 
-                sessionStorage.setItem("token", token);
-                sessionStorage.setItem("usuario", JSON.stringify(usuario));
-                navigate("/home");
+                if (type == "success") {
+                    sessionStorage.setItem("token", token);
+                    sessionStorage.setItem("usuario", JSON.stringify(usuario));
+                    navigate("/painel");
                 }
             },
-            onError: ({response: {data: {type, description } } }) => {
+            onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
                 });
             }
-        });
-
+        })
     }
 
     return (
@@ -56,7 +53,7 @@ const Login = () => {
                         type="primary"
                         htmlType="submit"
                         className="w-full mt-4"
-                        disabled={loginPending}
+                        loading={loginPending}
                     >Enviar</Button>
                 </Form>
             </div>
