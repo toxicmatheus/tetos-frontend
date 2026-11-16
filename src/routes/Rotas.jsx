@@ -13,7 +13,7 @@ const Rotas = () => {
                 <Route path="/" element={<Login />} />
                 { 
                     token && (
-                <Route path="/painel" element={<RotaProtegida><PageLayout/></RotaProtegida>}>
+                <Route path="painel" element={<RotaProtegida><PageLayout/></RotaProtegida>}>
                     <Route index element= {<Home/>} />
                     <Route path="niveis" element={<Niveis/>} />
                 </Route>
