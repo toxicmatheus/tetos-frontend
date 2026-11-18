@@ -1,6 +1,6 @@
 import { App, Button, Drawer, Form, Input, Popconfirm, Table } from "antd";
 import { LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
-import { useBuscarNiveis, useCriarNivel } from "../hooks/niveisHooks";
+import { useBuscarNiveis, useCriarNivel, useDeletarNivel } from "../hooks/niveisHooks";
 import { useState } from "react";
 
 const Niveis = () => {
@@ -9,9 +9,14 @@ const Niveis = () => {
     const { notification } = App.useApp();
     const { data: niveis, isLoading: loadingNiveis } = useBuscarNiveis();
     const { mutate: criarNivel, isLoading: loadingCriar } = useCriarNivel();
+    const { mutate: deletarNivel, isLoading: loadingDeletar } = useDeletarNivel();
+    const { mutate: editarNivel, isLoading: loadingEditar } = useEditarNivel();
+    const[formEditar] = Form.useForm();
+
 
     function criar(dados){  
-        criarNivel(dados, {
+    function deletar(id){  
+        deletarNivel(id, {
             onSuccess: ({ type, description}) =>{
                 setMostrarCriar(false);
                 notification[type]({

@@ -1,12 +1,14 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import RotaProtegida from "./RotaProtegida";
 import Niveis from "../pages/Niveis";
 import PageLayout from "../layouts/PageLayout";
+import { AdminContext } from "../contexts/AdminProvader";
+import { useContext } from "react";
 
 const Rotas = () => {
-    const token = sessionStorage.getItem("token");
+    const {token} = useContext(AdminContext);
     return ( 
         <BrowserRouter>
             <Routes>
@@ -19,9 +21,14 @@ const Rotas = () => {
                 </Route>
                 )
             }
+                <Route path="*" element={VoltarPraLogin} /> 
             </Routes>
         </BrowserRouter>    
     );
+}
+
+const VoltarPraLogin = () => {
+    return <Navigate to="/" />
 }
 
 export default Rotas;
