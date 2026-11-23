@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { AXIOS, QUERYCLIENT } from "../services";
 
-export const useBuscarLocatarios = () => {
+export const useBuscarLocatario = () => {
     return useQuery({
         queryKey: ["locatarios"],
         queryFn: async () => {
@@ -11,7 +11,7 @@ export const useBuscarLocatarios = () => {
     });
 }
 
-export const useCriarLocatarios = () => {
+export const useCriarLocatario = () => {
     return useMutation({
         mutationFn: async (dados) => {
             const res = await AXIOS.post("/locatarios", dados);
@@ -25,7 +25,7 @@ export const useCriarLocatarios = () => {
     })
 }
 
-export const useEditarLocatarios = () => {
+export const useEditarLocatario = () => {
     return useMutation({
         mutationFn: async (dados) => {
             const res = await AXIOS.put(`/locatarios/${dados.id}`, dados);
@@ -39,7 +39,7 @@ export const useEditarLocatarios = () => {
     })
 }
 
-export const useDeletarLocatarios = () => {
+export const useDeletarLocatario = () => {
     return useMutation({
         mutationFn: async (id) => {
             const res = await AXIOS.delete(`/locatarios/${id}`);

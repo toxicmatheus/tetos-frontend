@@ -1,8 +1,16 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { AXIOS, QUERYCLIENT } from "../services";
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { AXIOS, QUERYCLIENT } from "../services"
 
-// Buscar usuários
-export const useBuscarUsuarios = () => {
+export const useLogin = () => {
+    return useMutation({
+        mutationFn: async (dados) => {
+            const res = await AXIOS.post("/login", dados);
+            return res.data;
+        }
+    })
+}
+
+export const useBuscarUsuario = () => {
     return useQuery({
         queryKey: ["usuarios"],
         queryFn: async () => {
@@ -10,10 +18,9 @@ export const useBuscarUsuarios = () => {
             return res.data;
         }
     });
-};
+}
 
-// Criar usuário
-export const useCriarUsuarios = () => {
+export const useCriarUsuario = () => {
     return useMutation({
         mutationFn: async (dados) => {
             const res = await AXIOS.post("/usuarios", dados);
@@ -22,28 +29,26 @@ export const useCriarUsuarios = () => {
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
                 queryKey: ["usuarios"]
-            });
+            })
         }
-    });
-};
+    })
+}
 
-// Editar usuário
-export const useEditarUsuarios = () => {
+export const useEditarUsuario = () => {
     return useMutation({
-        mutationFn: async ({ id, ...dados }) => {
-            const res = await AXIOS.put(`/usuarios/${id}`, dados);
+        mutationFn: async (dados) => {
+            const res = await AXIOS.put(`/usuarios/${dados.id}`, dados);
             return res.data;
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
                 queryKey: ["usuarios"]
-            });
+            })
         }
-    });
-};
+    })
+}
 
-// Deletar usuário
-export const useDeletarUsuarios = () => {
+export const useDeletarUsuario = () => {
     return useMutation({
         mutationFn: async (id) => {
             const res = await AXIOS.delete(`/usuarios/${id}`);
@@ -52,17 +57,7 @@ export const useDeletarUsuarios = () => {
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
                 queryKey: ["usuarios"]
-            });
+            })
         }
-    });
-};
-
-// Login
-export const useLogin = () => {
-    return useMutation({
-        mutationFn: async (dados) => {
-            const res = await AXIOS.post("/login", dados);
-            return res.data;
-        }
-    });
-};
+    })
+}

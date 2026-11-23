@@ -10,6 +10,7 @@ const Menu = () => {
                 <NavLink end to="/painel/imoveis-tipo">Imóveis Tipo</NavLink>
                 <NavLink end to="/painel/locatarios">Locatários</NavLink>
                 <NavLink end to="/painel/usuarios">Usuários</NavLink>
+                <NavLink end to="/painel/imoveis">Imóveis</NavLink>
             </nav>
         </header>
     );

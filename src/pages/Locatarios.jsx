@@ -1,23 +1,23 @@
 import { App, Button, Drawer, Form, Input, Popconfirm, Table } from "antd";
 import { LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
-import { useBuscarLocatarios, useCriarLocatarios, useDeletarLocatarios, useEditarLocatarios } from "../hooks/locatariosHooks";
+import { useBuscarLocatario, useCriarLocatario, useDeletarLocatario, useEditarLocatario } from "../hooks/locatariosHooks";
 import { useState } from "react";
 
 
 const Locatarios = () => {
 
-    const [ mostrarCriar, setMostrarCriar] = useState(false);
-    const [ mostrarEditar, setMostrarEditar] = useState(false);
+    const [mostrarCriar, setMostrarCriar] = useState(false);
+    const [mostrarEditar, setMostrarEditar] = useState(false);
     const { notification } = App.useApp();
-    const { data: tipos, isLoading: loadingLocatarios } = useBuscarLocatarios();
-    const { mutate: criarLocatarios, isLoading: loadingCriar } = useCriarLocatarios();
-    const { mutate: editarLocatarios, isLoading: loadingEditar } = useEditarLocatarios();
-    const { mutate: deletarLocatarios } = useDeletarLocatarios();
-    const [ formCriar ] = Form.useForm();
-    const [ formEditar ] = Form.useForm();
+    const { data: locatarios, isLoading: loadingLocatario } = useBuscarLocatario();
+    const { mutate: criarLocatario, isLoading: loadingCriar } = useCriarLocatario();
+    const { mutate: editarLocatario, isLoading: loadingEditar } = useEditarLocatario();
+    const { mutate: deletarLocatario } = useDeletarLocatario();
+    const [formCriar] = Form.useForm();
+    const [formEditar] = Form.useForm();
 
-    function criar(dados){
-        criarLocatarios(dados, {
+    function criar(dados) {
+        criarLocatario(dados, {
             onSuccess: ({ type, description }) => {
                 setMostrarCriar(false);
                 formCriar.resetFields();
@@ -34,8 +34,8 @@ const Locatarios = () => {
         })
     }
 
-    function editar(dados){
-        editarLocatarios(dados, {
+    function editar(dados) {
+        editarLocatario(dados, {
             onSuccess: ({ type, description }) => {
                 setMostrarEditar(false);
                 notification[type]({
@@ -51,8 +51,8 @@ const Locatarios = () => {
         })
     }
 
-    function deletar(id){
-        deletarLocatarios(id, {
+    function deletar(id) {
+        deletarLocatario(id, {
             onSuccess: ({ type, description }) => {
                 notification[type]({
                     description,
@@ -67,10 +67,23 @@ const Locatarios = () => {
         })
     }
 
+    const formatPhone = (value) => {
+        if (!value) return '';
+        const digits = value.replace(/\D/g, '').slice(0, 11);
+
+        if (digits.length <= 2) return digits.length ? `(${digits}` : '';
+        if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+        if (digits.length <= 10) {
+            return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+        }
+        return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+    };
+
+
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3xl font-bold">Tipos de imóvel</h2>
+                <h2 className="text-3xl font-bold">Locatários</h2>
                 <Button
                     type="primary"
                     icon={<LuPlus />}
@@ -80,8 +93,8 @@ const Locatarios = () => {
 
             <div>
                 <Table
-                    dataSource={tipos || []}
-                    loading={loadingLocatarios}
+                    dataSource={locatarios || []}
+                    loading={loadingLocatario}
                     rowKey={"id"}
                 >
                     <Table.Column
@@ -150,9 +163,14 @@ const Locatarios = () => {
                     <Form.Item
                         label="Telefone"
                         name="telefone"
-                        rules={[{ required: true, message: "Campo obrigatório" }]}
+                        normalize={formatPhone}
+                        rules={[{ required: true, message: "Campo obrigatório" },
+                        {
+                            pattern: /^\(\d{2}\) \d{4,5}-\d{4}$/,
+                            message: 'Telefone inválido (use DDD + 8 ou 9 dígitos)',
+                        },]}
                     >
-                        <Input placeholder="(00) 00000-0000" />
+                        <Input placeholder="(00) 0000-0000" />
                     </Form.Item>
                     <Form.Item
                         label="CPF/CNPJ"
@@ -199,9 +217,14 @@ const Locatarios = () => {
                     <Form.Item
                         label="Telefone"
                         name="telefone"
-                        rules={[{ required: true, message: "Campo obrigatório" }]}
+                        normalize={formatPhone}
+                        rules={[{ required: true, message: "Campo obrigatório" },
+                        {
+                            pattern: /^\(\d{2}\) \d{4,5}-\d{4}$/,
+                            message: 'Telefone inválido (use DDD + 8 ou 9 dígitos)',
+                        },]}
                     >
-                        <Input placeholder="(00) 00000-0000" />
+                        <Input placeholder="(00) 0000-0000" />
                     </Form.Item>
                     <Form.Item
                         label="CPF/CNPJ"
