@@ -1,4 +1,4 @@
-import { App, Button, Drawer, Form, Input, Popconfirm, Table } from "antd";
+import { App, Button, Drawer, Form, Image, Input, Popconfirm, Table } from "antd";
 import { LuImageOff, LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
 import { useBuscarImovel, useCriarImovel, useDeletarImovel, useEditarImovel } from "../hooks/imoveisHooks";
 import { useState } from "react";

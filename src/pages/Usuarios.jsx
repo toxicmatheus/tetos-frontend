@@ -95,9 +95,9 @@ const Usuarios = () => {
 
             <div>
                 <Table
-                    dataSource={usuarios || []}
+                    dataSource={Array.isArray(usuarios) ? usuarios : []}
                     loading={loadingUsuario}
-                    rowKey={"id"}
+                    rowKey="id"
                 >
                     <Table.Column
                         title="Nome"
